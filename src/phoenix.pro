@@ -37,14 +37,16 @@ SOURCES += main.cpp\
     config.cpp \
     update.cpp \
     globals.cpp \
-    comm.cpp
+    comm.cpp \
+    backlight.cpp
 
 HEADERS  += widget.h \
     config.h \
     update.h \
     globals.h \
     systemconfig.h \
-    comm.h
+    comm.h \
+    backlight.h
 
 FORMS    += widget.ui \
     config.ui \

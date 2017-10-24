@@ -2,10 +2,11 @@
 #include "ui_config.h"
 
 #include <QFile>
-#include <QProcess>
 #include <QDir>
+#include <QDebug>
 
 #include "globals.h"
+#include "backlight.h"
 
 Config::Config(QWidget *parent) :
     QDialog(parent),
@@ -15,20 +16,9 @@ Config::Config(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     DEF_SETTINGS;
 
-    QProcess p;
-    p.start("cat",QStringList()<<"/sys/class/backlight/rpi_backlight/actual_brightness");
-    p.waitForFinished();
-    QString s = p.readAll();
-    int b = s.toInt();
-    ui->horizontalSliderBright->setValue(b);
+    ui->horizontalSliderBright->setValue( Backlight::Instance().getValue() );
     connect(ui->horizontalSliderBright, &QSlider::valueChanged, this, [](int value){
-        QFile file("/sys/class/backlight/rpi_backlight/brightness");
-        if (file.exists())
-        {
-            QString cmd = QString("echo %1 | sudo tee /sys/class/backlight/rpi_backlight/brightness").arg(value);
-            int res = system( cmd.toUtf8() );
-            Q_UNUSED(res);
-        }
+        if (!Backlight::Instance().setValue(value)) qCritical() << "Can't set backlight value";
     });
 
     ui->checkBoxAutoUpdate->setChecked( settings.value(SET_AUTOUPDATE,false).toBool() );
