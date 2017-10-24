@@ -1,0 +1,144 @@
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QWidget ---------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QWidget {
+    background: @background;
+    outline: none;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QLabel ----------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QLabel {
+    color: @text;
+}
+
+QLabel[accessibleName="altText"] {
+    color: @altText;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QPushButton -----------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QPushButton {
+    color: @text;
+    border: 2px solid @altText;
+    border-radius: 6px;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QSlider ---------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QSlider::groove:horizontal {
+    background: @background;
+    border: 2px solid @altText;
+    border-radius: 6px;
+    height: 40px;
+}
+
+QSlider::handle:horizontal {
+    background: @text;
+    border: none;
+    border-radius: 6px;
+    width: 40px;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QCheckBox -------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QCheckBox::indicator {
+    background: @background;
+    width: 40px;
+    height: 40px;
+    border: 2px solid @altText;
+    border-radius: 6px;
+}
+
+QCheckBox::indicator:checked {
+    background: @text;
+}
+
+QCheckBox::indicator:unchecked {
+    background: @background;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QComboBox -------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QComboBox {
+    background: @background;
+    height: 40px;
+    border: 2px solid @altText;
+    border-radius: 6px;
+    color: @text;
+    selection-color: @text;
+}
+
+QComboBox::drop-down {
+    border-width: 0px;
+}
+
+QComboBox::down-arrow {
+    image: url(noimg);
+    border-width: 0px;
+}
+
+QComboBox QAbstractItemView {
+    background: @background;
+    height: 40px;
+    border: 2px solid @altText;
+    border-radius: 6px;
+    color: @text;
+    selection-background-color: @background;
+    selection-color: @text;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QPlainTextEdit --------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QPlainTextEdit {
+    color: @text;
+    border: 2px solid @altText;
+    border-radius: 6px;
+}
+
+/*----------------------------------------------------------------------------*/
+/*---------------------------- QScrollBar ------------------------------------*/
+/*----------------------------------------------------------------------------*/
+
+QScrollBar {
+    background: @background;
+    border: 2px solid @altText;
+    border-radius: 6px;
+}
+
+QScrollBar:vertical {
+    width: 40px;
+}
+
+QScrollBar:horizontal {
+    height: 40px;
+}
+
+QScrollBar::handle {
+    background: @text;
+    border: 2px solid @altText;
+    border-radius: 6px;
+    width: 40px;
+}
+
+QScrollBar::add-page, QScrollBar::sub-page {
+     background: none;
+}
+
+QScrollBar::add-line, QScrollBar::sub-line {
+    background: none;
+}
+

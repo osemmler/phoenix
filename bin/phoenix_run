@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# dont run phoenix when connected over RDP
+if [ "$DISPLAY" == ":0" ]; then
+    sleep 3
+    cd /home/pi/phoenix/bin
+    sudo ./phoenix -f
+fi

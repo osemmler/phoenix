@@ -1,0 +1,10 @@
+bin/phoenix
+build/*
+*.pro.user
+*.pyc
+cookiejar
+Makefile
+.qmake.stash
+src/systemconfig.h
+*.log
+*.conf
