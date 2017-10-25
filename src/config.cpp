@@ -16,6 +16,13 @@ Config::Config(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     DEF_SETTINGS;
 
+    connect(ui->checkBoxAutoBright, &QCheckBox::toggled, [this](bool checked){
+        DEF_SETTINGS;
+        settings.setValue(SET_AUTOBRIGHT,checked);
+        ui->horizontalSliderBright->setEnabled( !checked );
+    });
+    ui->checkBoxAutoBright->setChecked( settings.value(SET_AUTOBRIGHT,false).toBool() );
+
     ui->horizontalSliderBright->setValue( Backlight::Instance().getValue() );
     connect(ui->horizontalSliderBright, &QSlider::valueChanged, this, [](int value){
         if (!Backlight::Instance().setValue(value)) qCritical() << "Can't set backlight value";

@@ -10,6 +10,7 @@
 #define SET_AUTOUPDATE      "autoupdate"
 #define SET_AUTORESET       "autoreset"
 #define SET_STYLE           "style"
+#define SET_AUTOBRIGHT      "autobright"
 
 class StyleDefs
 {

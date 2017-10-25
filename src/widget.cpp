@@ -18,6 +18,7 @@
 #include "update.h"
 #include "globals.h"
 #include "comm.h"
+#include "backlight.h"
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -174,8 +175,39 @@ Widget::Widget(QWidget *parent) :
         weatherLoadProcess.start("../script/weather.py");
     };
 
+    auto backlightDesiredValue = [this](){
+        int night = 8;
+        int day = 40;
+        int evening = 15;
+        int hour = QTime::currentTime().hour();
+        if (hour < 7) return night;
+        if (hour < 18) return day;
+        if (hour < 21) return evening;
+        return night;
+    };
+
     // main timer loop
-    auto timerTimeout = [this,getNameDay,updateWeather](){
+    auto timerTimeout = [this,getNameDay,updateWeather,backlightDesiredValue](){
+
+        DEF_SETTINGS;
+        if (settings.value(SET_AUTOBRIGHT,false).toBool())
+        {
+            int curr_value = Backlight::Instance().getValue();
+            if (curr_value == -1)
+            {
+                qCritical() << "Can't read current backlight value.";
+            }
+            else
+            {
+                int des_value = backlightDesiredValue();
+                if (des_value != curr_value)
+                {
+                    qDebug() << "Changing backlight to new auto value =" << des_value;
+                    if (!Backlight::Instance().setValue( des_value ))
+                        qCritical() << "Can't change backlight to new auto value";
+                }
+            }
+        }
 
         QString time = QDateTime::currentDateTime().toString("h:mm");
         if (time != ui->labelTime->text())
