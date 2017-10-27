@@ -13,12 +13,33 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QRegExp>
+#include <QTableView>
 
 #include "config.h"
 #include "update.h"
 #include "globals.h"
 #include "comm.h"
 #include "backlight.h"
+#include "phoenix.h"
+#include "propmodel.h"
+#include "model.h"
+
+inline QDebug &operator<<(QDebug d, const Message &msg)
+{
+    d.noquote() << "Message[ Type=" << QString().sprintf("0x%02X",msg.type) << ", ";
+    d << "MonsterId=" << msg.monsterId << ", ";
+    d << "PartId=" << msg.partId << ", ";
+    d << "PropId=" << msg.propId << ", ";
+    d << "ValueSize=" << msg.valueSize << ", ";
+    d << "Value={";
+    for(int i=0; i<msg.valueSize; i++)
+    {
+        d <<  QString().sprintf("0x%02X", (&msg.value)[i] ).trimmed();
+        d << (i<msg.valueSize-1 ? "," : "" );
+    }
+    d << "} ]";
+    return d;
+}
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -35,6 +56,10 @@ Widget::Widget(QWidget *parent) :
     weatherDataMap.append({ui->labelTemp2, ui->labelWeather2, ui->labelDay2, QString()});
     weatherDataMap.append({ui->labelTemp3, ui->labelWeather3, ui->labelDay3, QString()});
     weatherDataMap.append({ui->labelTemp4, ui->labelWeather4, ui->labelDay4, QString()});
+
+    propModel = new PropModel(this);
+    Phoenix * p = new Phoenix;
+    p->setup();
 
     commCount = 0;
     Comm::Instance().f = [this]()
@@ -187,7 +212,17 @@ Widget::Widget(QWidget *parent) :
     };
 
     // main timer loop
-    auto timerTimeout = [this,getNameDay,updateWeather,backlightDesiredValue](){
+    auto timerTimeout = [this,getNameDay,updateWeather,backlightDesiredValue,p](){
+
+        Message msg;
+        while(p->readMessage(msg))
+        {
+            qDebug() << msg;
+            propModel->update(msg);
+            //printf("IN: ");
+            //for(int i=0; i<MSG_SIZE; i++) printf("%02X ",msg[i]);
+            //printf("\n");
+        }
 
         DEF_SETTINGS;
         if (settings.value(SET_AUTOBRIGHT,false).toBool())
@@ -260,6 +295,12 @@ Widget::Widget(QWidget *parent) :
         config.setGeometry( this->geometry() );
         config.exec();
         if (styleChanged) updateWeatherIcons();
+    });
+    connect(ui->pushButtonModel, &QPushButton::clicked, this, [this](){
+        Model m(this);
+        m.setModel(propModel);
+        m.setGeometry( this->geometry() );
+        m.exec();
     });
     connect(ui->pushButtonUpdate, &QPushButton::clicked, this, [this,runUpdate](){
         runUpdate();

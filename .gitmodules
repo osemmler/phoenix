@@ -1,0 +1,3 @@
+[submodule "src/Monster"]
+	path = src/Monster
+	url = https://github.com/osemmler/monster.git

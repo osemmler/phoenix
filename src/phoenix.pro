@@ -32,25 +32,32 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += main.cpp\
-        widget.cpp \
-    config.cpp \
-    update.cpp \
-    globals.cpp \
-    comm.cpp \
-    backlight.cpp
+INCLUDEPATH += Monster
 
-HEADERS  += widget.h \
-    config.h \
-    update.h \
-    globals.h \
-    systemconfig.h \
-    comm.h \
-    backlight.h
+SOURCES += *.cpp
+HEADERS += *.h
+FORMS   += *.ui
 
-FORMS    += widget.ui \
-    config.ui \
-    update.ui
+SOURCES += Monster/*.cpp
+HEADERS += Monster/*.h
+
+#SOURCES += main.cpp\
+#        widget.cpp \
+#    config.cpp \
+#    update.cpp \
+#    globals.cpp \
+#    comm.cpp \
+#    backlight.cpp \
+#    phoenix.cpp
+
+#HEADERS  += widget.h \
+#    config.h \
+#    update.h \
+#    globals.h \
+#    systemconfig.h \
+#    comm.h \
+#    backlight.h \
+#    phoenix.h
 
 DEPENDPATH += "."
 

@@ -754,7 +754,7 @@
   <widget class="QPushButton" name="pushButtonUpdate">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>350</x>
      <y>430</y>
      <width>140</width>
      <height>40</height>
@@ -800,6 +800,32 @@
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButtonModel">
+   <property name="geometry">
+    <rect>
+     <x>500</x>
+     <y>430</y>
+     <width>140</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="accessibleName">
+    <string>textAlt</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>MODEL</string>
+   </property>
+  </widget>
   <zorder>labelTime</zorder>
   <zorder>labelDate</zorder>
   <zorder>labelNameday</zorder>
@@ -829,6 +855,7 @@
   <zorder>pushButtonConfig</zorder>
   <zorder>pushButtonUpdate</zorder>
   <zorder>labelVersion</zorder>
+  <zorder>pushButtonModel</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

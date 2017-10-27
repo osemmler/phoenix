@@ -8,6 +8,7 @@
 namespace Ui {
 class Widget;
 }
+class PropModel;
 
 class Widget : public QWidget
 {
@@ -28,6 +29,7 @@ private:
     int commCount;
 
     Ui::Widget *ui;
+    PropModel * propModel;
     QProcess weatherLoadProcess;
     QProcess tempLoadProcess;
     QProcess checkUpdateProcess;
