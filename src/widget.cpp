@@ -18,7 +18,7 @@
 #include "config.h"
 #include "update.h"
 #include "globals.h"
-#include "comm.h"
+//#include "comm.h"
 #include "backlight.h"
 #include "phoenix.h"
 #include "propmodel.h"
@@ -61,13 +61,13 @@ Widget::Widget(QWidget *parent) :
     Phoenix * p = new Phoenix;
     p->setup();
 
-    commCount = 0;
-    Comm::Instance().f = [this]()
+    //commCount = 0;
+    /*Comm::Instance().f = [this]()
     {
         commCount++;
         std::string str(Comm::Instance().data);
         ui->labelTempIn->setText(QString::fromStdString(str)+"°");
-    };
+    };*/
 
     auto runUpdate =[this](){
         Update update(this);
@@ -256,14 +256,14 @@ Widget::Widget(QWidget *parent) :
             qDebug() << "Check update - start process";
             checkUpdateProcess.start("../script/check_update.sh");
 
-            if (commCount == 0)
+            /*if (commCount == 0)
             {
                 ui->labelTempIn->setText("-");
             }
             else
             {
                 commCount = 0;
-            }
+            }*/
 
             int minute = QDateTime::currentDateTime().toString("m").toInt();
             if (ui->labelWeatherUpdateTime->text().isEmpty() || minute == 15 || minute == 45)

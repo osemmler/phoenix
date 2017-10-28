@@ -26,7 +26,7 @@ private:
         QString iconSvgData;
     };
 
-    int commCount;
+    //int commCount;
 
     Ui::Widget *ui;
     PropModel * propModel;
