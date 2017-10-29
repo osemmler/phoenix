@@ -1,20 +1,5 @@
 #include "propmodel.h"
 
-#include <QDateTime>
-
-#include "Prop.h"
-
-struct ModelItem
-{
-    uint8_t monsterId;
-    uint8_t partId;
-    uint8_t propId;
-    Prop::ePropType propType;
-    Prop::ePropMode propMode;
-    QVariant value;
-    QDateTime updateTime;
-};
-
 QString propTypeToString(const Prop::ePropType &t)
 {
     switch (t)
@@ -141,6 +126,13 @@ QVariant PropModel::headerData(int section, Qt::Orientation orientation, int rol
     }
 
     return QAbstractTableModel::headerData(section,orientation,role);
+}
+
+ModelItem *PropModel::modelItemForIndex(const QModelIndex &index)
+{
+    if (!index.isValid() || index.column()<0 || index.row()<0) return 0;
+    if (index.column()>=columnCount() || index.row()>=rowCount()) return 0;
+    return itemList[index.row()];
 }
 
 ModelItem * PropModel::findModelItem(const Message &msg) const

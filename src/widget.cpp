@@ -61,6 +61,64 @@ Widget::Widget(QWidget *parent) :
     Phoenix * p = new Phoenix;
     p->setup();
 
+    auto backlightDesiredValue = [this](int light){
+        int min = 8;
+        int max = 60;
+        int tresh = 1010;
+        if (light>tresh) return min;
+        return (int)(max-(max-min)*(light/(double)tresh));
+    };
+
+    connect(propModel, &PropModel::dataChanged, this, [this, backlightDesiredValue](const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles){
+        if (topLeft.row() != bottomRight.row())
+        {
+            qCritical() << "Multiple model rows changed.";
+        }
+        else
+        {
+            ModelItem * item = propModel->modelItemForIndex(topLeft);
+            if (item == 0)
+            {
+                qCritical() << "Cant het model item for index.";
+            }
+            else
+            {
+                qDebug() << item->value;
+                if (item->monsterId == 0 && item->partId == 1 && item->propId == 0)
+                {
+                    // temp in
+                    float temp = item->value.toFloat();
+                    ui->labelTempIn->setText( QString::number(temp,'f',1)+"°" );
+                }
+                if (item->monsterId == 0 && item->partId == 0 && item->propId == 0)
+                {
+                    // light analog
+                    DEF_SETTINGS;
+                    int light = item->value.toInt();
+
+                    if (settings.value(SET_AUTOBRIGHT,false).toBool())
+                    {
+                        int curr_value = Backlight::Instance().getValue();
+                        if (curr_value == -1)
+                        {
+                            qCritical() << "Can't read current backlight value.";
+                        }
+                        else
+                        {
+                            int des_value = backlightDesiredValue(light);
+                            if (des_value != curr_value)
+                            {
+                                qDebug() << "Changing backlight to new auto value =" << des_value;
+                                if (!Backlight::Instance().setValue( des_value ))
+                                    qCritical() << "Can't change backlight to new auto value";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     //commCount = 0;
     /*Comm::Instance().f = [this]()
     {
@@ -200,42 +258,11 @@ Widget::Widget(QWidget *parent) :
         weatherLoadProcess.start("../script/weather.py");
     };
 
-    auto backlightDesiredValue = [this](){
-        int night = 8;
-        int day = 40;
-        int evening = 15;
-        int hour = QTime::currentTime().hour();
-        if (hour < 7) return night;
-        if (hour < 18) return day;
-        if (hour < 21) return evening;
-        return night;
-    };
-
     // main timer loop
     auto timerTimeout = [this,getNameDay,updateWeather,backlightDesiredValue,p](){
 
         Message msg;
         while(p->readMessage(msg)) propModel->update(msg);
-
-        DEF_SETTINGS;
-        if (settings.value(SET_AUTOBRIGHT,false).toBool())
-        {
-            int curr_value = Backlight::Instance().getValue();
-            if (curr_value == -1)
-            {
-                qCritical() << "Can't read current backlight value.";
-            }
-            else
-            {
-                int des_value = backlightDesiredValue();
-                if (des_value != curr_value)
-                {
-                    qDebug() << "Changing backlight to new auto value =" << des_value;
-                    if (!Backlight::Instance().setValue( des_value ))
-                        qCritical() << "Can't change backlight to new auto value";
-                }
-            }
-        }
 
         QString time = QDateTime::currentDateTime().toString("h:mm");
         if (time != ui->labelTime->text())

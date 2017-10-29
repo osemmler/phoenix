@@ -3,9 +3,21 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include "Message.h"
+#include <QDateTime>
 
-class ModelItem;
+#include "Message.h"
+#include "Prop.h"
+
+struct ModelItem
+{
+    uint8_t monsterId;
+    uint8_t partId;
+    uint8_t propId;
+    Prop::ePropType propType;
+    Prop::ePropMode propMode;
+    QVariant value;
+    QDateTime updateTime;
+};
 
 class PropModel : public QAbstractTableModel
 {
@@ -18,6 +30,8 @@ public:
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+    ModelItem * modelItemForIndex(const QModelIndex &index);
 
 private:
     QList<ModelItem*> itemList;
