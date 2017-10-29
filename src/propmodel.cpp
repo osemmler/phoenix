@@ -43,8 +43,13 @@ QVariant propValueToQVariant(const Message &msg)
     case Prop::NONE:        return QVariant();
     case Prop::LIGHT_A:     return *(int*)(&msg.value);
     case Prop::LIGHT_D:     return *(bool*)(&msg.value);
-    case Prop::TEMP:        return *(float*)(&msg.value);
-    case Prop::HUM:         return *(float*)(&msg.value);
+    case Prop::TEMP:
+    case Prop::HUM:
+    {
+        float f;
+        memcpy(&f,&msg.value,sizeof(float));
+        return f;
+    }
     default:                return QVariant();
     }
 }

@@ -215,14 +215,7 @@ Widget::Widget(QWidget *parent) :
     auto timerTimeout = [this,getNameDay,updateWeather,backlightDesiredValue,p](){
 
         Message msg;
-        while(p->readMessage(msg))
-        {
-            qDebug() << msg;
-            propModel->update(msg);
-            //printf("IN: ");
-            //for(int i=0; i<MSG_SIZE; i++) printf("%02X ",msg[i]);
-            //printf("\n");
-        }
+        while(p->readMessage(msg)) propModel->update(msg);
 
         DEF_SETTINGS;
         if (settings.value(SET_AUTOBRIGHT,false).toBool())
