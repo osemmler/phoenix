@@ -1,5 +1,7 @@
 #include "propmodel.h"
 
+#include <QDateTime>
+
 #include "Prop.h"
 
 struct ModelItem
@@ -10,6 +12,7 @@ struct ModelItem
     Prop::ePropType propType;
     Prop::ePropMode propMode;
     QVariant value;
+    QDateTime updateTime;
 };
 
 QString propTypeToString(const Prop::ePropType &t)
@@ -80,11 +83,13 @@ void PropModel::update(const Message &msg)
 
     // set value in model
     item->value = propValueToQVariant(msg);
+    item->updateTime = QDateTime::currentDateTime();
 
     // emit data changed
     int row = itemList.indexOf( item );
-    QModelIndex idx = index(row,5);
-    emit dataChanged(idx,idx);
+    QModelIndex idx1 = index(row,5);
+    QModelIndex idx2 = index(row,6);
+    emit dataChanged(idx1,idx2);
 }
 
 int PropModel::rowCount(const QModelIndex &parent) const
@@ -94,7 +99,7 @@ int PropModel::rowCount(const QModelIndex &parent) const
 
 int PropModel::columnCount(const QModelIndex &parent) const
 {
-    return parent.isValid() ? 0 : 6;
+    return parent.isValid() ? 0 : 7;
 }
 
 QVariant PropModel::data(const QModelIndex &index, int role) const
@@ -113,6 +118,7 @@ QVariant PropModel::data(const QModelIndex &index, int role) const
         case 3: return propTypeToString(item->propType);
         case 4: return propModeToString(item->propMode);
         case 5: return item->value;
+        case 6: return item->updateTime.toString("d.M. h:mm:ss");
         }
     }
 
@@ -130,6 +136,7 @@ QVariant PropModel::headerData(int section, Qt::Orientation orientation, int rol
         case 3: return "Typ";
         case 4: return "Mód";
         case 5: return "Hodnota";
+        case 6: return "Aktualizace";
         }
     }
 
