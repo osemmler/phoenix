@@ -24,20 +24,23 @@ QString propModeToString(const Prop::ePropMode &m)
     }
 }
 
+template<typename T>
+T propValueToQVariant(const uint8_t * valuePtr)
+{
+    T v;
+    memcpy(&v,valuePtr,sizeof(T));
+    return v;
+}
+
 QVariant propValueToQVariant(const Message &msg)
 {
     switch (msg.propType)
     {
     case Prop::NONE:        return QVariant();
-    case Prop::LIGHT_A:     return *(int*)(&msg.value);
-    case Prop::LIGHT_D:     return *(bool*)(&msg.value);
-    case Prop::TEMP:
-    case Prop::HUM:
-    {
-        float f;
-        memcpy(&f,&msg.value,sizeof(float));
-        return f;
-    }
+    case Prop::LIGHT_A:     return propValueToQVariant<int>(&msg.value);
+    case Prop::LIGHT_D:     return propValueToQVariant<bool>(&msg.value);
+    case Prop::TEMP:        return propValueToQVariant<float>(&msg.value);
+    case Prop::HUM:         return propValueToQVariant<float>(&msg.value);
     default:                return QVariant();
     }
 }

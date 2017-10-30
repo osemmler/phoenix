@@ -24,7 +24,7 @@
 #include "propmodel.h"
 #include "model.h"
 
-inline QDebug &operator<<(QDebug d, const Message &msg)
+/*inline QDebug &operator<<(QDebug d, const Message &msg)
 {
     d.noquote() << "Message[ Type=" << QString().sprintf("0x%02X",msg.type) << ", ";
     d << "MonsterId=" << msg.monsterId << ", ";
@@ -39,7 +39,7 @@ inline QDebug &operator<<(QDebug d, const Message &msg)
     }
     d << "} ]";
     return d;
-}
+}*/
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -64,12 +64,13 @@ Widget::Widget(QWidget *parent) :
     auto backlightDesiredValue = [this](int light){
         int min = 8;
         int max = 100;
-        int tresh = 1010;
+        int tresh = 1020;
         if (light>tresh) return min;
         return (int)(max-(max-min)*(light/(double)tresh));
     };
 
     connect(propModel, &PropModel::dataChanged, this, [this, backlightDesiredValue](const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles){
+        Q_UNUSED(roles);
         if (topLeft.row() != bottomRight.row())
         {
             qCritical() << "Multiple model rows changed.";
