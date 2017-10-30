@@ -62,10 +62,11 @@ Widget::Widget(QWidget *parent) :
     p->setup();
 
     auto backlightDesiredValue = [this](int light){
-        int min = 8;
+        int low = 8;
+        int min = 22;
         int max = 100;
         int tresh = 1020;
-        if (light>tresh) return min;
+        if (light>=tresh) return low;
         return (int)(max-(max-min)*(light/(double)tresh));
     };
 
