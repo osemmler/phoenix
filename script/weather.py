@@ -88,8 +88,8 @@ def accuweather():
         temp_l = fday_html.find("span","small-temp").text
         #cond = fday_html.find("span","cond").text
     
-        temp_h = re.search(r'\d+',temp_h).group()
-        lt = re.search(r'\d+',temp_l);
+        temp_h = re.search(r'-?\d+',temp_h).group()
+        lt = re.search(r'-?\d+',temp_l);
         if lt == None:
             temp_l = temp_h
             temp_h = "-"
