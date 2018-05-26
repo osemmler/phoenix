@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Load data from weather website.
 #
@@ -71,43 +72,42 @@ def accuweather():
     "44": "cloud-snow-moon.svg",            #Night Mostly Cloudy w/ Snow  
     }    
     
+    #url = "https://www.accuweather.com/en/cz/prague/125594/daily-weather-forecast/125594"
+    url = "https://www.meteocentrum.cz/predpoved-pocasi/cz/6250/praha"
+
     browser = MyBrowser()
-    html = browser.get("https://www.accuweather.com/en/cz/prague/125594/daily-weather-forecast/125594")
+    html = browser.get(url)
     soup = BeautifulSoup(html, "html.parser")
     
     #with open('x.html', 'w') as f:
     #    f.write(html)
-    
-    for i in range(1,6):
-        fday = "fday"+str(i)
-        fday_html = soup.find("li",fday)
-    
-        #date = fday_html.find("h4").text
-        icon = fday_html.find("div","icon").get('class', [])[1]
-        temp_h = fday_html.find("span","large-temp").text
-        temp_l = fday_html.find("span","small-temp").text
-        #cond = fday_html.find("span","cond").text
-    
-        temp_h = re.search(r'\d+',temp_h).group()
-        lt = re.search(r'\d+',temp_l);
-        if lt == None:
-            temp_l = temp_h
-            temp_h = "-"
-        else:        
-            temp_l = lt.group()
-    
-        iconKey = icon.split('-')[1]
-        if iconKey in iconMap:
-            iconfile = "accuweather/"+str(iconMap[iconKey])
-        else:
-            iconfile = iconKey            
+    #sys.exit(1)      
+
+    i = 0
+    days = soup.find("div",id="snippet--days")
+    for day in days.find_all("li"):
+        
+        temp = day.find("span", "tabs__temp").text
+        temp_h = temp.split("/")[0][:-1]
+        temp_l = temp.split("/")[1][:-1]
+        
+        #icon = fday_html.find("div","icon").get('class', [])[1]
+        
+        #iconKey = icon.split('-')[1]
+        #if iconKey in iconMap:
+            #iconfile = "accuweather/"+str(iconMap[iconKey])
+        #else:
+            #iconfile = iconKey            
     
         sys.stdout.write(temp_h)
         sys.stdout.write("#")
         sys.stdout.write(temp_l)
         sys.stdout.write("#")
-        sys.stdout.write(iconfile)
+        sys.stdout.write("1")
         sys.stdout.write("\n")
+
+        i=i+1
+        if (i==5) : break
 
 accuweather()
 #wunderground()
