@@ -15,20 +15,21 @@ import json
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def wunderground():
-    f = urllib2.urlopen('http://api.wunderground.com/api/WU_4377582/forecast10day/q/CA/San_Francisco.json')
-    json_string = f.read()
-    print json_string
-    #parsed_json = json.loads(json_string)
-    #location = parsed_json['location']['city']
-    #temp_f = parsed_json['current_observation']['temp_f']
-    #print "Current temperature in %s is: %s" % (location, temp_f)
-    f.close()
+def meteocentrum():
 
-def accuweather():
-
-    # mapping based on https://developer.accuweather.com/weather-icons
     iconMap = {
+        "2" : "sun.svg",
+        "3" : "cloud-sun.svg",
+        "4" : "cloud-sun.svg",
+        "6" : "clouds-sun.svg",
+        "7" : "cloud.svg",
+        "10": "cloud-drizzle.svg",
+        "11": "cloud-rain.svg",
+        "13": "cloud-rain-sun.svg",
+        "15" : "cloud-lightning-sun.svg",
+    }
+
+    iconMapOld = {
     "1" : "sun.svg",
     "2" : "sun.svg",
     "3" : "cloud-sun.svg",
@@ -90,25 +91,22 @@ def accuweather():
         temp = day.find("span", "tabs__temp").text
         temp_h = temp.split("/")[0][:-1]
         temp_l = temp.split("/")[1][:-1]
+        iconKey = re.search('wi state-(\d+)', str(day)).group(1)
         
-        #icon = fday_html.find("div","icon").get('class', [])[1]
-        
-        #iconKey = icon.split('-')[1]
-        #if iconKey in iconMap:
-            #iconfile = "accuweather/"+str(iconMap[iconKey])
-        #else:
-            #iconfile = iconKey            
+        if iconKey in iconMap:
+            iconfile = "accuweather/"+str(iconMap[iconKey])
+        else:
+            iconfile = iconKey            
     
         sys.stdout.write(temp_h)
         sys.stdout.write("#")
         sys.stdout.write(temp_l)
         sys.stdout.write("#")
-        sys.stdout.write("1")
+        sys.stdout.write(iconfile)
         sys.stdout.write("\n")
 
         i=i+1
         if (i==5) : break
 
-accuweather()
-#wunderground()
+meteocentrum()
 
