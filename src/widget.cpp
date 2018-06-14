@@ -92,11 +92,11 @@ Widget::Widget(QWidget *parent) :
                     float temp = item->value.toFloat();
                     ui->labelTempIn->setText( QString::number(temp,'f',1)+"°" );
                 }
-                if (item->monsterId == 0 && item->partId == 1 && item->propId == 0)
+                if (item->monsterId == 0 && item->partId == 1 && item->propId == 1)
                 {
                     // humidity in
                     float hum = item->value.toFloat();
-                    ui->labelHumIn->setText( QString::number(hum,'f',1)+"%" );
+                    ui->labelHumIn->setText( QString::number(hum,'f',0)+"%" );
                 }
                 if (item->monsterId == 0 && item->partId == 0 && item->propId == 0)
                 {
