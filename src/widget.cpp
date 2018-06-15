@@ -86,7 +86,7 @@ Widget::Widget(QWidget *parent) :
             else
             {
                 qDebug() << item->value;
-                if (item->monsterId == 0 && item->partId == 1 && item->propId == 0)
+                if (item->monsterId == 0 && item->partId == 2 && item->propId == 0)
                 {
                     // temp in
                     float temp = item->value.toFloat();
